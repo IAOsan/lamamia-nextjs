@@ -1,0 +1,8 @@
+.copy {
+	background: -webkit-linear-gradient(
+		var(--c-primary-200),
+		var(--c-primary-900)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}

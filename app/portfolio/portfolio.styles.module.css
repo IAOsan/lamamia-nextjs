@@ -1,0 +1,32 @@
+.link {
+	border-radius: var(--border-radius);
+	display: block;
+	height: 40rem;
+	position: relative;
+	width: 100%;
+}
+.link::after {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	background-color: hsla(0, 0%, 0%, 0.5);
+}
+.linkTag {
+	bottom: 1.2rem;
+	color: var(--c-light-500);
+	position: absolute;
+	right: 1.6rem;
+	transition: color var(--transition) ease;
+	z-index: 10;
+}
+.link:hover .linkTag {
+	color: var(--c-primary-300);
+}
+.image {
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}

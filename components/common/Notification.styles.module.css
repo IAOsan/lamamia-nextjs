@@ -1,0 +1,14 @@
+.wrapper {
+	background-color: #2196f3;
+	bottom: 0;
+	color: var(--c-light-50);
+	cursor: pointer;
+	left: 0;
+	padding: 2.8rem 0;
+	position: fixed;
+	width: 100%;
+}
+.success {
+	background-color: #4caf50;
+	color: var(--c-light-50);
+}

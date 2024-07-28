@@ -1,0 +1,9 @@
+.image {
+	display: block;
+	width: 100%;
+	padding-top: 75%;
+	background-color: gray;
+}
+.button {
+	align-self: baseline;
+}

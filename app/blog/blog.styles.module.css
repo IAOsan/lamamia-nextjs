@@ -1,0 +1,10 @@
+.postUsername {
+	border: 1px solid red;
+}
+.postDetailImageWrapper {
+	padding: 35%;
+	position: relative;
+}
+.postDetailImageWrapper img {
+	object-fit: cover;
+}
