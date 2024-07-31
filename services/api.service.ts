@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/config';
 import {
 	IPortfolioCategory,
 	IPortfolioWork,
@@ -11,14 +12,12 @@ import {
 import { HttpError, attachSearchParams } from '@/utils';
 import httpService from './http.service';
 
-export const BASE_URL =
-	process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 export const PORTFOLIO_CATEGORIES_ENDPOINT =
-	BASE_URL + '/api/portfolio/categories';
-export const PORTFOLIO_WORKS_ENDPOINT = BASE_URL + '/api/portfolio/works';
-export const POSTS_ENDPOINT = BASE_URL + '/api/posts';
-export const USERS_ENDPOINT = BASE_URL + '/api/users';
-export const REGISTER_ENDPOINT = BASE_URL + '/api/auth/register';
+	API_BASE_URL + '/api/portfolio/categories';
+export const PORTFOLIO_WORKS_ENDPOINT = API_BASE_URL + '/api/portfolio/works';
+export const POSTS_ENDPOINT = API_BASE_URL + '/api/posts';
+export const USERS_ENDPOINT = API_BASE_URL + '/api/users';
+export const REGISTER_ENDPOINT = API_BASE_URL + '/api/auth/register';
 
 const endpoints = {
 	async getPortfolioCategories(

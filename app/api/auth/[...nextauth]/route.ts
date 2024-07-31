@@ -1,11 +1,11 @@
-import { loadDB } from '@/lib';
+import { NEXTAUTH_SECRET } from '@/config';
+import { loadDB, verifyPassword } from '@/lib';
 import { IUser } from '@/types/custom.types';
-import bcrypt from 'bcrypt';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const authOpts: NextAuthOptions = {
-	secret: process.env.NEXTAUTH_SECRET,
+	secret: NEXTAUTH_SECRET,
 	providers: [
 		CredentialsProvider({
 			id: 'credentials',
@@ -18,7 +18,7 @@ const authOpts: NextAuthOptions = {
 					(u) => u.email === email
 				);
 				if (!user) throw new Error('Credentials are invalid');
-				const isValidPassword = await bcrypt.compare(
+				const isValidPassword = await verifyPassword(
 					password,
 					user.password
 				);

@@ -1,11 +1,8 @@
-import { loadDB } from '@/lib';
+import { hashPassword, loadDB } from '@/lib';
 import { IUser } from '@/types/custom.types';
 import { JSONresponse } from '@/utils';
-import bcrypt from 'bcrypt';
 import { nanoid } from 'nanoid';
 import { NextRequest, NextResponse } from 'next/server';
-
-const SALT_ROUNDS = 10;
 
 export async function POST(request: NextRequest) {
 	try {
@@ -22,7 +19,7 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+		const hashedPassword = await hashPassword(password);
 		const newUser: IUser = {
 			id: nanoid(),
 			username,

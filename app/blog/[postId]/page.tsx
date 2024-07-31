@@ -10,34 +10,6 @@ interface IParams {
 	};
 }
 
-export const dynamic = 'force-dynamic';
-
-export async function generateStaticParams() {
-	const posts = await apiService.getPosts({
-		searchParams: {
-			fields: 'id',
-			limit: '10',
-		},
-	});
-
-	return posts.map((p) => ({
-		postId: p.id,
-	}));
-}
-
-export async function generateMetadata({ params }: IParams) {
-	const post = await apiService.getPostById(params.postId, {
-		searchParams: {
-			fields: 'title, description',
-		},
-	});
-
-	return {
-		title: post ? `lamamia | ${post.title}` : 'lamamia',
-		description: post ? post.description : '',
-	};
-}
-
 async function BlogPostPage({ params }: IParams) {
 	const post = await apiService.getPostById(params.postId, {
 		searchParams: {

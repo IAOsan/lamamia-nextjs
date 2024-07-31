@@ -10,31 +10,24 @@ interface IParams {
 }
 
 export async function generateStaticParams() {
-	const cats = await apiService.getPortfolioCategories({
-		searchParams: {
-			fields: 'name',
+	// const db = await loadDB();
+	// const params = db.data.portfolioCategories.map((c) => ({
+	// 	categoryName: c.name,
+	// }));
+
+	// console.log({ params });
+
+	return [
+		{
+			categoryName: 'illustrations',
 		},
-	});
-
-	return cats.map((c) => ({
-		categoryName: c.name,
-	}));
-}
-
-export async function generateMetadata({ params }: IParams) {
-	const cat = await apiService.getPortfolioCategories({
-		searchParams: {
-			name: params.categoryName,
-			fields: 'description',
+		{
+			categoryName: 'webpages',
 		},
-	});
-
-	return {
-		title: cat[0]
-			? `lamamia | ${capitalize(params.categoryName)}`
-			: 'lamamia',
-		description: cat[0] ? cat[0].description : '',
-	};
+		{
+			categoryName: 'apps',
+		},
+	];
 }
 
 async function PortfolioDetailPage({ params }: IParams): Promise<JSX.Element> {
