@@ -4,12 +4,14 @@ import {
 	IPortfolioWork,
 	IPost,
 	IRequestOpts,
+	IUserLogin,
 	NewPostType,
 	PostIdType,
 	ResponseType,
 	UserRegisterType,
 } from '@/types/custom.types';
 import { HttpError, attachSearchParams } from '@/utils';
+import { signIn } from 'next-auth/react';
 import httpService from './http.service';
 
 export const PORTFOLIO_CATEGORIES_ENDPOINT =
@@ -125,6 +127,22 @@ const endpoints = {
 					message: error.message,
 					statusCode: error.statusCode,
 					reason: { email: 'The user already exists' },
+				});
+				return Promise.reject(err);
+			}
+		}
+	},
+	async loginWithEmailAndPassword(credentials: IUserLogin): Promise<void> {
+		const res = await signIn('credentials', {
+			redirect: false,
+			email: credentials.email,
+			password: credentials.password,
+		});
+		if (!res?.ok) {
+			if (res?.status && res.status === 401) {
+				const err = new HttpError({
+					statusCode: 401,
+					reason: { email: res.error },
 				});
 				return Promise.reject(err);
 			}

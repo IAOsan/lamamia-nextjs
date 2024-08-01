@@ -1,31 +1,25 @@
 'use client';
 
-import { loginFormValidation } from '@/utils';
+import { UserLoginType } from '@/types/custom.types';
+import { HttpError, loginFormValidation } from '@/utils';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ZodError } from 'zod';
 import styles from './auth.styles.module.css';
 
-interface ILogin {
-	email: string;
-	password: string;
-}
+type FormErrorType = Partial<UserLoginType>;
 
-type FormErrorType = Partial<ILogin>;
-
-const formSchema: ILogin = {
+const formSchema: UserLoginType = {
 	email: '',
 	password: '',
 };
 
 function LoginForm(): JSX.Element {
-	const [formData, setFormData] = useState<ILogin>(formSchema);
+	const [formData, setFormData] = useState<UserLoginType>(formSchema);
 	const [error, setError] = useState<FormErrorType | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const searchParams = useSearchParams();
-	const loginError = searchParams.get('error');
 	const router = useRouter();
 
 	async function handleSubmit(
@@ -33,14 +27,23 @@ function LoginForm(): JSX.Element {
 	): Promise<void> {
 		e.preventDefault();
 
-		setError(null);
 		setIsLoading(true);
+		setError(null);
 		try {
 			const parsedData = loginFormValidation.parse(formData);
-			await signIn('credentials', {
+			const res = await signIn('credentials', {
+				redirect: false,
 				email: parsedData.email,
 				password: parsedData.password,
 			});
+
+			if (!res?.ok) {
+				throw new HttpError({
+					statusCode: 401,
+					reason: { email: res?.error },
+				});
+			}
+
 			router.replace('/dashboard');
 		} catch (error) {
 			if (error instanceof ZodError) {
@@ -48,6 +51,9 @@ function LoginForm(): JSX.Element {
 				setError({
 					[e.path[0]]: e.message,
 				});
+			}
+			if (error instanceof HttpError) {
+				setError(error.reason as FormErrorType);
 			}
 		} finally {
 			setIsLoading(false);
@@ -75,12 +81,9 @@ function LoginForm(): JSX.Element {
 					type='email'
 					placeholder='Your email address'
 				/>
-				{error?.email ||
-					(loginError && (
-						<small className='c-danger-500'>
-							{error?.email || loginError}
-						</small>
-					))}
+				{error?.email && (
+					<small className='c-danger-500'>{error?.email}</small>
+				)}
 			</div>
 			<div className='form__group'>
 				<input

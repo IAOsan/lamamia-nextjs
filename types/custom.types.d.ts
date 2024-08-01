@@ -40,10 +40,7 @@ export type NewPostType = Pick<
 	'title' | 'description' | 'image' | 'content'
 >;
 
-export interface IUserLogin {
-	email: IUser['email'];
-	password: IUser['password'];
-}
+export type UserLoginType = Pick<IUser, 'email' | 'password'>;
 
 export type UserRegisterType = Pick<IUser, 'username' | 'email' | 'password'>;
 

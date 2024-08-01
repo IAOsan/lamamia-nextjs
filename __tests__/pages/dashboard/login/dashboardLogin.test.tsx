@@ -3,6 +3,7 @@ import {
 	$loginSubmitBtn,
 	$passwordInput,
 	authenticatedSessionMock,
+	failureSignIn,
 	navigationMock,
 	nextAuthMock,
 	unauthenticatedSessionMock,
@@ -23,7 +24,7 @@ vi.mock('next-auth/react', () => nextAuthMock);
 
 const user = setupUser();
 
-function renderPage() {
+function setup() {
 	return render(<LoginPage />);
 }
 
@@ -37,19 +38,19 @@ describe('<DashboardLoginPage />', () => {
 	describe('Auth', () => {
 		it('should not display the login page if you are authenticated', () => {
 			(useSession as Mock).mockReturnValueOnce(authenticatedSessionMock);
-			renderPage();
+			setup();
 
 			expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
 		});
 		it('should call router.replace(/dashboard) if you are authenticated', () => {
 			(useSession as Mock).mockReturnValueOnce(authenticatedSessionMock);
-			renderPage();
+			setup();
 
 			expect(useRouterMock.replace).toHaveBeenCalledWith('/dashboard');
 		});
 		it('should display the login page if you are not authenticated', () => {
 			(useSession as Mock).mockReturnValueOnce(unauthenticatedSessionMock);
-			renderPage();
+			setup();
 
 			expect(screen.queryByTestId('login-page')).toBeInTheDocument();
 		});
@@ -60,33 +61,33 @@ describe('<DashboardLoginPage />', () => {
 		});
 
 		it('should display the email input', () => {
-			renderPage();
+			setup();
 			expect($emailInput()).toBeInTheDocument();
 		});
 		it('should be of type "email" the email input', () => {
-			renderPage();
+			setup();
 			screen.debug();
 			expect($emailInput()).toHaveAttribute('type', 'email');
 		});
 		it('should display the password input', () => {
-			renderPage();
+			setup();
 			expect($passwordInput()).toBeInTheDocument();
 		});
 		it('should be of type "password" the password input', () => {
-			renderPage();
+			setup();
 			expect($passwordInput()).toHaveAttribute('type', 'password');
 		});
 		it('should display the submit button', () => {
-			renderPage();
+			setup();
 			expect($loginSubmitBtn()).toBeInTheDocument();
 			expect($loginSubmitBtn()).toHaveTextContent('Login');
 		});
 		it('should be of type "submit" the submit button', () => {
-			renderPage();
+			setup();
 			expect($loginSubmitBtn()).toHaveAttribute('type', 'submit');
 		});
 		it('should show the link to register', () => {
-			renderPage();
+			setup();
 			expect(
 				screen.queryByText("Don't have an account?")
 			).toBeInTheDocument();
@@ -95,7 +96,7 @@ describe('<DashboardLoginPage />', () => {
 			).toBeInTheDocument();
 		});
 		it('should have the correct attributes the link to register', async () => {
-			renderPage();
+			setup();
 			expect(
 				screen.queryByRole('link', { name: 'Sign up' })
 			).toHaveAttribute('href', '/dashboard/register');
@@ -108,7 +109,7 @@ describe('<DashboardLoginPage />', () => {
 
 		it('should be able to wite in the email input', async () => {
 			const expectedValue = 'email@example.com';
-			renderPage();
+			setup();
 
 			await user.type($emailInput()!, expectedValue);
 
@@ -116,14 +117,14 @@ describe('<DashboardLoginPage />', () => {
 		});
 		it('should be able to wite in the password input', async () => {
 			const expectedValue = 'thepasswordishere';
-			renderPage();
+			setup();
 
 			await user.type($passwordInput()!, expectedValue);
 
 			expect($passwordInput()).toHaveValue(expectedValue);
 		});
 		it('should disable the submit button when the form is submitted', async () => {
-			renderPage();
+			setup();
 
 			await submitForm({
 				email: users[0].email,
@@ -133,7 +134,7 @@ describe('<DashboardLoginPage />', () => {
 			expect($loginSubmitBtn()).toHaveProperty('disabled', true);
 		});
 		it('should display the loader text when the form is submitted', async () => {
-			renderPage();
+			setup();
 
 			await submitForm({
 				email: users[0].email,
@@ -143,7 +144,7 @@ describe('<DashboardLoginPage />', () => {
 			expect($loginSubmitBtn()).toHaveTextContent('Logging in...');
 		});
 		it('should enable the submit button after the form is submitted', async () => {
-			renderPage();
+			setup();
 
 			await submitForm({
 				email: users[0].email,
@@ -159,7 +160,7 @@ describe('<DashboardLoginPage />', () => {
 			);
 		});
 		it('should not display the loader text after the form is submitted', async () => {
-			renderPage();
+			setup();
 
 			await submitForm({
 				email: users[0].email,
@@ -175,7 +176,7 @@ describe('<DashboardLoginPage />', () => {
 			);
 		});
 		it('should call signIn() with the correct parameters after the form is submitted successfully', async () => {
-			renderPage();
+			setup();
 
 			await submitForm({
 				email: users[0].email,
@@ -183,13 +184,14 @@ describe('<DashboardLoginPage />', () => {
 			});
 
 			expect(signIn).toHaveBeenCalledWith('credentials', {
+				redirect: false,
 				email: users[0].email,
 				password: users[0].password,
 			});
 		});
 		describe('validation', () => {
 			it('should display an error if the email input is empty and the form is submitted', async () => {
-				renderPage();
+				setup();
 
 				await submitForm();
 
@@ -198,7 +200,7 @@ describe('<DashboardLoginPage />', () => {
 				).toBeInTheDocument();
 			});
 			it('should display an error if the email is not valid and the form is submitted', async () => {
-				renderPage();
+				setup();
 
 				await submitForm({
 					email: 'hola@mail',
@@ -210,7 +212,7 @@ describe('<DashboardLoginPage />', () => {
 				).toBeInTheDocument();
 			});
 			it('should display an error if the password input is empty and the form is submitted', async () => {
-				renderPage();
+				setup();
 
 				await submitForm({ email: users[0].email });
 
@@ -218,27 +220,25 @@ describe('<DashboardLoginPage />', () => {
 					screen.queryByText('Please, fill this field')
 				).toBeInTheDocument();
 			});
-			it.skip('should display an error if the user not exists', async () => {
-				renderPage();
+			it('should display an error if something went wrong with the signin', async () => {
+				(signIn as Mock).mockReturnValueOnce(failureSignIn);
+
+				setup();
 
 				await submitForm({
 					email: 'notexist@mail.com',
 					password: users[0].password,
 				});
 
-				await waitFor(() =>
-					expect(
-						screen.queryByText('Credentials are invalid')
-					).toBeInTheDocument()
+				await waitFor(
+					() =>
+						expect(
+							screen.queryByText('Loading...')
+						).not.toBeInTheDocument(),
+					{
+						timeout: 6000,
+					}
 				);
-			});
-			it.skip('should display an error if the password is not valid', async () => {
-				renderPage();
-
-				await submitForm({
-					email: users[0].email,
-					password: '12345678910',
-				});
 
 				await waitFor(() =>
 					expect(

@@ -214,22 +214,31 @@ export const authenticatedSessionMock = {
 	status: 'authenticated',
 	update: vi.fn(),
 };
+export const failureSignIn = new Promise((resolve) => {
+	setTimeout(() => {
+		return resolve({
+			error: 'Credentials are invalid',
+			status: 401,
+			ok: false,
+			url: null,
+		});
+	}, 500);
+});
 export const nextAuthMock = {
 	useSession: vi.fn(() => loadingSessionMock),
 	signOut: vi.fn(),
-	signIn: vi.fn(
-		() =>
-			new Promise((resolve) => {
-				setTimeout(() => {
-					return resolve({
-						error: undefined,
-						status: 200,
-						ok: true,
-						url: '/',
-					});
-				}, 500);
-			})
-	),
+	signIn: vi.fn(() => {
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				return resolve({
+					error: undefined,
+					status: 200,
+					ok: true,
+					url: '/',
+				});
+			}, 500);
+		});
+	}),
 };
 export const useRouterMock = {
 	push: vi.fn(),
