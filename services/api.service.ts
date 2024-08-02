@@ -4,10 +4,10 @@ import {
 	IPortfolioWork,
 	IPost,
 	IRequestOpts,
-	IUserLogin,
 	NewPostType,
 	PostIdType,
 	ResponseType,
+	UserLoginType,
 	UserRegisterType,
 } from '@/types/custom.types';
 import { HttpError, attachSearchParams } from '@/utils';
@@ -132,7 +132,7 @@ const endpoints = {
 			}
 		}
 	},
-	async loginWithEmailAndPassword(credentials: IUserLogin): Promise<void> {
+	async loginWithEmailAndPassword(credentials: UserLoginType): Promise<void> {
 		const res = await signIn('credentials', {
 			redirect: false,
 			email: credentials.email,
