@@ -9,27 +9,6 @@ interface IParams {
 	};
 }
 
-export async function generateStaticParams() {
-	// const db = await loadDB();
-	// const params = db.data.portfolioCategories.map((c) => ({
-	// 	categoryName: c.name,
-	// }));
-
-	// console.log({ params });
-
-	return [
-		{
-			categoryName: 'illustrations',
-		},
-		{
-			categoryName: 'webpages',
-		},
-		{
-			categoryName: 'apps',
-		},
-	];
-}
-
 async function PortfolioDetailPage({ params }: IParams): Promise<JSX.Element> {
 	// regenerate each 24hrs
 	const works = await apiService.getPortfolioWorks(params.categoryName, {
