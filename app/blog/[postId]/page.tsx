@@ -1,4 +1,5 @@
 import Icon from '@/components/common/Icon.component';
+import { BASE_URL } from '@/config';
 import apiService from '@/services/api.service';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -10,7 +11,9 @@ interface IParams {
 	};
 }
 
-async function BlogPostPage({ params }: IParams) {
+async function BlogPostPage({ params }: IParams): Promise<JSX.Element | null> {
+	if (!BASE_URL) return null;
+
 	const post = await apiService.getPostById(params.postId, {
 		searchParams: {
 			embed: 'user',

@@ -1,4 +1,5 @@
 import PortfolioCard from '@/components/portfolio/PortfolioCard.component';
+import { BASE_URL } from '@/config';
 import apiService from '@/services/api.service';
 import { capitalize } from '@/utils';
 import { notFound } from 'next/navigation';
@@ -9,7 +10,11 @@ interface IParams {
 	};
 }
 
-async function PortfolioDetailPage({ params }: IParams): Promise<JSX.Element> {
+async function PortfolioDetailPage({
+	params,
+}: IParams): Promise<JSX.Element | null> {
+	if (!BASE_URL) return null;
+
 	// regenerate each 24hrs
 	const works = await apiService.getPortfolioWorks(params.categoryName, {
 		next: {

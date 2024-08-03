@@ -1,4 +1,5 @@
 import PostCard from '@/components/blog/PostCard.component';
+import { BASE_URL } from '@/config';
 import apiService from '@/services/api.service';
 import { Metadata } from 'next';
 
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 		'Explore interesting articles on various topics on our blog. Find inspiration, practical advice and in-depth analysis to enrich your knowledge',
 };
 
-async function BlogPage(): Promise<JSX.Element> {
+async function BlogPage(): Promise<JSX.Element | null> {
+	if (!BASE_URL) return null;
+
 	// revalidate every 5mins
 	const posts = await apiService.getPosts({
 		next: {

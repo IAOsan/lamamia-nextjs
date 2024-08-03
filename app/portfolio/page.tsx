@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/config';
 import apiService from '@/services/api.service';
 import { capitalize } from '@/utils';
 import { Metadata } from 'next';
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
 	description: 'You can view all portfolio categories',
 };
 
-async function PortfolioPage(): Promise<JSX.Element> {
+async function PortfolioPage(): Promise<JSX.Element | null> {
+	if (!BASE_URL) return null;
+
 	// revalidate each 7days
 	const data = await apiService.getPortfolioCategories({
 		searchParams: {
