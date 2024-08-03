@@ -22,10 +22,9 @@ export async function GET(req: NextRequest, { params: { postId } }: IParams) {
 			);
 		}
 
-		const features = new APIFeatures(db, post).embedRelatedData(
-			searchParams,
-			'id,username'
-		);
+		const features = new APIFeatures(db, post)
+			.embedRelatedData(searchParams, 'id,username')
+			.limiter(searchParams);
 
 		return NextResponse.json(JSONresponse.success(features.data[0]));
 	} catch (error) {
