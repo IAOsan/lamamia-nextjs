@@ -1,10 +1,11 @@
 import { posts } from '@/__tests__/fixtures';
 import { render, screen } from '@/__tests__/testsUtils';
 import BlogPage from '@/app/blog/page';
+import { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
 
 async function renderPage() {
-	return render(await BlogPage());
+	return render((await BlogPage()) as ReactElement<any>);
 }
 
 const expectedPosts = posts;

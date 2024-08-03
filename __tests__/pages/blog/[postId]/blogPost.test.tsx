@@ -1,10 +1,13 @@
 import { posts } from '@/__tests__/fixtures';
 import { render, screen } from '@/__tests__/testsUtils';
 import BlogPostPage from '@/app/blog/[postId]/page';
+import { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
 
 async function renderPage(postId: string) {
-	return render(await BlogPostPage({ params: { postId } }));
+	return render(
+		(await BlogPostPage({ params: { postId } })) as ReactElement<any>
+	);
 }
 
 const expectedPostId = '1';

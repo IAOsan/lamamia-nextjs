@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
 import PortfolioPage from '../../../app/portfolio/page';
 import { render, screen } from '../../testsUtils';
@@ -10,7 +11,7 @@ const $appsLink = () => screen.queryByRole('link', { name: 'Apps' });
 async function setup() {
 	// return render(<PortfolioPage />, { wrapper: Layout });
 	// return render(Layout({ children: await PortfolioPage() }));
-	return render(await PortfolioPage());
+	return render((await PortfolioPage()) as ReactElement<any>);
 }
 
 describe('<PortfolioPage />', () => {

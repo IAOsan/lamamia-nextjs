@@ -1,5 +1,6 @@
 import { portfolioCategories, portfolioWorks } from '@/__tests__/fixtures';
 import SlugPage from '@/app/portfolio/[categoryName]/page';
+import { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '../../../testsUtils';
 
@@ -22,7 +23,9 @@ async function setup(param: string) {
 	// return render(
 	// 	Layout({ children: await SlugPage({ params: { categoryName: param } }) })
 	// );
-	return render(await SlugPage({ params: { categoryName: param } }));
+	return render(
+		(await SlugPage({ params: { categoryName: param } })) as ReactElement<any>
+	);
 }
 
 describe('<PortfolioSlugPage />', () => {
