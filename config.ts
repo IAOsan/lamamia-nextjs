@@ -1,3 +1,6 @@
+import { join } from 'path';
+
+export const DB_PATH = join(process.cwd(), 'db.json');
 export const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 export const SALT_HASH_ROUNDS = 12;
 export const BASE_URL =

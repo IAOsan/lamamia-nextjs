@@ -1,3 +1,4 @@
+import { DB_PATH } from '@/config';
 import {
 	IPortfolioCategory,
 	IPortfolioWork,
@@ -13,7 +14,6 @@ export interface IDB {
 	users: Array<IUser>;
 }
 
-const DB_PATH = './data/db.json';
 const DB_INITIAL_DATA: IDB = {
 	portfolioCategories: [],
 	portfolioWorks: [],
