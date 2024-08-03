@@ -29,10 +29,10 @@ function ContactForm(): JSX.Element {
 		setIsLoading(true);
 		try {
 			contactFormValidation.parse(formData);
-			await new Promise((resolve, reject) => {
+			await new Promise((resolve) => {
 				setTimeout(() => {
 					return resolve('ok');
-				}, 3000);
+				}, 500);
 			});
 			notification.show({
 				title: 'Done!',
