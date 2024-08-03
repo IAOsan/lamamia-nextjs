@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config';
+import { BASE_URL } from '@/config';
 import {
 	IPortfolioCategory,
 	IPortfolioWork,
@@ -15,11 +15,11 @@ import { signIn } from 'next-auth/react';
 import httpService from './http.service';
 
 export const PORTFOLIO_CATEGORIES_ENDPOINT =
-	API_BASE_URL + '/api/portfolio/categories';
-export const PORTFOLIO_WORKS_ENDPOINT = API_BASE_URL + '/api/portfolio/works';
-export const POSTS_ENDPOINT = API_BASE_URL + '/api/posts';
-export const USERS_ENDPOINT = API_BASE_URL + '/api/users';
-export const REGISTER_ENDPOINT = API_BASE_URL + '/api/auth/register';
+	BASE_URL + '/api/portfolio/categories';
+export const PORTFOLIO_WORKS_ENDPOINT = BASE_URL + '/api/portfolio/works';
+export const POSTS_ENDPOINT = BASE_URL + '/api/posts';
+export const USERS_ENDPOINT = BASE_URL + '/api/users';
+export const REGISTER_ENDPOINT = BASE_URL + '/api/auth/register';
 
 const endpoints = {
 	async getPortfolioCategories(
