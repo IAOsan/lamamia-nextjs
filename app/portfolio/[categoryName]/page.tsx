@@ -23,6 +23,21 @@ export async function generateStaticParams() {
 	return params;
 }
 
+export async function generateMetadata({ params }: IParams) {
+	const cat = await apiService.getPortfolioCategories({
+		searchParams: {
+			name: params.categoryName,
+			fields: 'description',
+		},
+	});
+	return {
+		title: cat[0]
+			? `lamamia | ${capitalize(params.categoryName)}`
+			: 'lamamia',
+		description: cat[0] ? cat[0].description : '',
+	};
+}
+
 async function PortfolioDetailPage({
 	params,
 }: IParams): Promise<JSX.Element | null> {

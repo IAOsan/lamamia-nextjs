@@ -25,6 +25,19 @@ export async function generateStaticParams() {
 	return params;
 }
 
+export async function generateMetadata({ params }: IParams) {
+	const post = await apiService.getPostById(params.postId, {
+		searchParams: {
+			fields: 'title,description',
+		},
+	});
+
+	return {
+		title: post ? `lamamia | ${post.title}` : 'lamamia',
+		description: post ? post.description : '',
+	};
+}
+
 async function BlogPostPage({ params }: IParams): Promise<JSX.Element | null> {
 	if (!BASE_URL) return null;
 
