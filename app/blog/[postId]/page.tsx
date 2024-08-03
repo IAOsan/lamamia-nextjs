@@ -11,6 +11,20 @@ interface IParams {
 	};
 }
 
+export async function generateStaticParams() {
+	const cats = await apiService.getPosts({
+		searchParams: {
+			fields: 'id',
+			limit: '10',
+		},
+	});
+	const params = cats.map((p) => ({
+		postId: p.id,
+	}));
+
+	return params;
+}
+
 async function BlogPostPage({ params }: IParams): Promise<JSX.Element | null> {
 	if (!BASE_URL) return null;
 
