@@ -10,6 +10,19 @@ interface IParams {
 	};
 }
 
+export async function generateStaticParams() {
+	const cats = await apiService.getPortfolioCategories({
+		searchParams: {
+			fields: 'name',
+		},
+	});
+	const params = cats.map((c) => ({
+		categoryName: c.name,
+	}));
+
+	return params;
+}
+
 async function PortfolioDetailPage({
 	params,
 }: IParams): Promise<JSX.Element | null> {
